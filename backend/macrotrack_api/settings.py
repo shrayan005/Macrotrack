@@ -28,8 +28,12 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
 
-# Validate required environment variables on startup
-_REQUIRED_ENV_VARS = ['SECRET_KEY', 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_HOST', 'DB_PORT']
+# Validate required environment variables on startup.
+# In production we accept either DATABASE_URL (Neon/Render) OR individual DB_* vars.
+_has_database_url = bool(config('DATABASE_URL', default=''))
+_REQUIRED_ENV_VARS = ['SECRET_KEY'] + (
+    [] if _has_database_url else ['DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_HOST', 'DB_PORT']
+)
 _missing_vars = [var for var in _REQUIRED_ENV_VARS if not config(var, default='')]
 if _missing_vars and not DEBUG:
     raise ValueError(f"Missing required environment variables: {', '.join(_missing_vars)}")
