@@ -1,0 +1,23 @@
+﻿/* ============================================
+   MACROTRACK - MODULAR STYLES
+   ============================================ */
+
+/* Import all modular CSS files */
+@import './styles/global.css';
+@import './styles/buttons.css';
+@import './styles/navbar.css';
+@import './styles/auth.css';
+@import './styles/layout.css';
+@import './styles/cards.css';
+@import './styles/dashboard.css';
+@import './styles/diary.css';
+@import './styles/dailyNote.css';
+@import './styles/foodSearch.css';
+@import './styles/progress.css';
+@import './styles/reports.css';
+@import './styles/profile.css';
+@import './styles/coach.css';
+@import './styles/modals.css';
+@import './styles/utilities.css';
+@import './styles/responsive.css';
+@import './styles/legal.css';

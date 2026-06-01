@@ -1,0 +1,256 @@
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 1200px) {
+  .navbar-content {
+    padding: 16px 20px;
+  }
+
+  .page-content {
+    padding: 32px 20px;
+  }
+
+  .dashboard-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-right {
+    order: -1;
+  }
+
+  .diary-content {
+    grid-template-columns: 1fr;
+  }
+
+  .diary-sidebar {
+    order: -1;
+  }
+
+  .progress-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-sidebar {
+    position: static;
+  }
+
+  .settings-nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .settings-nav-item {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 40px;
+  }
+
+  .hero-description {
+    font-size: 18px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 32px;
+  }
+
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    flex-direction: column;
+    padding: 20px;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .navbar-links.mobile-open {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  /* Desktop logout hidden on mobile; mobile logout shown inside hamburger menu via navbar.css */
+  .navbar-logout {
+    display: none;
+  }
+
+  .page-title {
+    font-size: 28px;
+  }
+
+  .dashboard-header-section,
+  .diary-header,
+  .progress-header,
+  .search-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .dashboard-quick-actions,
+  .diary-controls,
+  .progress-controls {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .date-input,
+  .range-select,
+  .btn {
+    width: 100%;
+  }
+
+  .stats-overview {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .diary-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .progress-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-content {
+    padding: 24px;
+  }
+
+  .quick-links-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nutrition-rings {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-content {
+    padding: 24px;
+    width: 95%;
+  }
+
+  .nutrition-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-container {
+    padding: 32px 24px;
+  }
+
+  .food-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .food-item-arrow {
+    display: none;
+  }
+
+  .habit-grid-dashboard {
+    grid-template-columns: repeat(15, 1fr);
+  }
+
+  .search-header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .search-header-actions .btn {
+    width: 100%;
+  }
+
+  .coach-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-content {
+    padding-left: 0;
+  }
+
+  .adjustment-comparison {
+    flex-direction: column;
+  }
+
+  .adjustment-arrow {
+    transform: rotate(90deg);
+  }
+
+  .coach-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 32px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .stats-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .diary-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-value {
+    font-size: 24px;
+  }
+
+  .stat-overview-value {
+    font-size: 20px;
+  }
+
+  .habit-grid-dashboard {
+    grid-template-columns: repeat(10, 1fr);
+  }
+}
+
+/* Additional responsive adjustments for coach page */
+@media (max-width: 1200px) {
+  .coach-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .coach-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}

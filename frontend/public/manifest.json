@@ -1,0 +1,8 @@
+{
+short_name: NutriTrack,
+name: NutriTrack - AI Nutrition Tracker,
+start_url: .,
+display: standalone,
+theme_color: #4CAF50,
+background_color: #ffffff
+}

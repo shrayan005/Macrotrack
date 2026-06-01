@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Search Diagnostic Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #333;
+        }
+        .result {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #000;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { border-left-color: #22c55e; background: #f0fdf4; }
+        .error { border-left-color: #ef4444; background: #fef2f2; }
+        .warning { border-left-color: #f59e0b; background: #fffbeb; }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            width: 300px;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .status.ok { background: #22c55e; color: white; }
+        .status.fail { background: #ef4444; color: white; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Food Search Diagnostic Tool</h1>
+    <p>This page will help diagnose why food search isn't working.</p>
+
+    <!-- Test 1: Check Auth Token -->
+    <div class="test-section">
+        <h2>Test 1: Check Authentication Token</h2>
+        <button onclick="checkAuthToken()">Check Auth Token</button>
+        <div id="auth-result"></div>
+    </div>
+
+    <!-- Test 2: Test Backend API Directly -->
+    <div class="test-section">
+        <h2>Test 2: Test Backend API</h2>
+        <button onclick="testBackendAPI()">Test API (All Foods)</button>
+        <button onclick="testBackendSearch('chicken')">Test API (Search "chicken")</button>
+        <button onclick="testBackendSearch('apple')">Test API (Search "apple")</button>
+        <div id="api-result"></div>
+    </div>
+
+    <!-- Test 3: Test Frontend API Service -->
+    <div class="test-section">
+        <h2>Test 3: Custom Search Test</h2>
+        <input type="text" id="search-input" placeholder="Type a food to search..." value="chicken">
+        <button onclick="testCustomSearch()">Search</button>
+        <div id="search-result"></div>
+    </div>
+
+    <!-- Test 4: Check SessionStorage -->
+    <div class="test-section">
+        <h2>Test 4: Check SessionStorage Cache</h2>
+        <button onclick="checkSessionStorage()">Check Cache</button>
+        <button onclick="clearSessionStorage()">Clear Cache</button>
+        <div id="storage-result"></div>
+    </div>
+
+    <!-- Test 5: Network Tab Hint -->
+    <div class="test-section">
+        <h2>Test 5: Manual Checks</h2>
+        <p><strong>Open DevTools (F12) and:</strong></p>
+        <ol>
+            <li>Go to <strong>Console</strong> tab - Look for errors</li>
+            <li>Go to <strong>Network</strong> tab - Filter by "XHR"</li>
+            <li>Click "Test API" button above and watch Network tab</li>
+            <li>Look for request to: <code>/api/foods/search/</code></li>
+            <li>Check Status: Should be <strong>200</strong>, not 401 or 500</li>
+        </ol>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000/api';
+
+        function getAuthToken() {
+            return localStorage.getItem('authToken');
+        }
+
+        function log(elementId, message, type = 'result') {
+            const el = document.getElementById(elementId);
+            el.className = `result ${type}`;
+            el.innerHTML = message;
+        }
+
+        async function checkAuthToken() {
+            const token = getAuthToken();
+            if (token) {
+                log('auth-result', `✅ Auth Token Found:\n${token}`, 'success');
+            } else {
+                log('auth-result', `❌ NO AUTH TOKEN!\n\nYou need to log in first.\nGo to: http://localhost:3000/login`, 'error');
+            }
+        }
+
+        async function testBackendAPI() {
+            const token = getAuthToken();
+            if (!token) {
+                log('api-result', '❌ No auth token. Please log in first.', 'error');
+                return;
+            }
+
+            log('api-result', '⏳ Calling API...', 'warning');
+
+            try {
+                const response = await fetch(`${API_BASE}/foods/search/?page=1&page_size=50`, {
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    log('api-result',
+                        `✅ API SUCCESS!\n\n` +
+                        `Status: ${response.status}\n` +
+                        `Total Foods: ${data.count}\n` +
+                        `Returned: ${data.results?.length || 0} foods\n` +
+                        `Page: ${data.page} of ${data.total_pages}\n\n` +
+                        `First 5 foods:\n${data.results?.slice(0, 5).map((f, i) => `${i + 1}. ${f.name}`).join('\n') || 'None'}`,
+                        'success'
+                    );
+                } else {
+                    log('api-result',
+                        `❌ API ERROR!\n\n` +
+                        `Status: ${response.status}\n` +
+                        `Message: ${data.detail || JSON.stringify(data)}`,
+                        'error'
+                    );
+                }
+            } catch (err) {
+                log('api-result',
+                    `❌ NETWORK ERROR!\n\n` +
+                    `${err.message}\n\n` +
+                    `Make sure Django server is running on port 8000.`,
+                    'error'
+                );
+            }
+        }
+
+        async function testBackendSearch(searchTerm) {
+            const token = getAuthToken();
+            if (!token) {
+                log('api-result', '❌ No auth token. Please log in first.', 'error');
+                return;
+            }
+
+            log('api-result', `⏳ Searching for "${searchTerm}"...`, 'warning');
+
+            try {
+                const response = await fetch(`${API_BASE}/foods/search/?q=${searchTerm}&page_size=50`, {
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    log('api-result',
+                        `✅ SEARCH SUCCESS!\n\n` +
+                        `Search term: "${searchTerm}"\n` +
+                        `Found: ${data.results?.length || 0} foods\n\n` +
+                        `Results:\n${data.results?.slice(0, 10).map((f, i) => `${i + 1}. ${f.name} (${f.calories} cal)`).join('\n') || 'None'}`,
+                        'success'
+                    );
+                } else {
+                    log('api-result',
+                        `❌ SEARCH ERROR!\n\n` +
+                        `Status: ${response.status}\n` +
+                        `Message: ${data.detail || JSON.stringify(data)}`,
+                        'error'
+                    );
+                }
+            } catch (err) {
+                log('api-result',
+                    `❌ NETWORK ERROR!\n\n${err.message}`,
+                    'error'
+                );
+            }
+        }
+
+        async function testCustomSearch() {
+            const searchTerm = document.getElementById('search-input').value;
+            await testBackendSearch(searchTerm);
+        }
+
+        function checkSessionStorage() {
+            const cached = sessionStorage.getItem('all_cached_foods');
+            if (cached) {
+                try {
+                    const data = JSON.parse(cached);
+                    const age = Math.round((Date.now() - data.timestamp) / 1000 / 60);
+                    log('storage-result',
+                        `✅ Cache Found!\n\n` +
+                        `Foods cached: ${data.foods?.length || 0}\n` +
+                        `Age: ${age} minutes old\n` +
+                        `Valid: ${age < 10 ? 'Yes ✅' : 'No (expired) ❌'}\n\n` +
+                        `Sample foods:\n${data.foods?.slice(0, 5).map((f, i) => `${i + 1}. ${f.name}`).join('\n') || 'None'}`,
+                        data.foods?.length > 0 ? 'success' : 'warning'
+                    );
+                } catch (e) {
+                    log('storage-result',
+                        `⚠️ Cache exists but is corrupted!\n\n` +
+                        `Error: ${e.message}\n\n` +
+                        `Recommendation: Clear cache and reload.`,
+                        'warning'
+                    );
+                }
+            } else {
+                log('storage-result',
+                    `ℹ️ No cache found.\n\n` +
+                    `This is normal on first load.\n` +
+                    `Foods will be fetched from backend.`,
+                    'warning'
+                );
+            }
+        }
+
+        function clearSessionStorage() {
+            sessionStorage.removeItem('all_cached_foods');
+            log('storage-result',
+                `✅ Cache cleared!\n\n` +
+                `Refresh the Food Search page to reload foods from backend.`,
+                'success'
+            );
+        }
+
+        // Auto-check auth on load
+        window.onload = () => {
+            checkAuthToken();
+        };
+    </script>
+</body>
+</html>

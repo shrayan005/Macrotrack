@@ -1,0 +1,69 @@
+﻿# Dependencies
+node_modules/
+*/node_modules/
+
+# Cache
+.cache/
+*/.cache/
+__pycache__/
+*/__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Environment files (comprehensive protection)
+.env
+.env.*
+!.env.example
+!.env.example.*
+*.env.local
+backend/.env
+backend/.env.*
+!backend/.env.example
+!backend/.env.example.*
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# Build
+build/
+dist/
+*.log
+
+# Virtual environments
+venv/
+.venv/
+*/venv/
+*/.venv/
+
+# Claude settings
+.claude/
+*/.claude/
+claude.md
+*/claude.md
+**/claude.md
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# AI Models
+*.pth
+*.pt
+
+.planning/
+GEMINI.md
+
+# Ignore all markdown files
+*.md
+CLAUDE.md
+*.pdf
+*.png
+*.jpg
+*.docx
+
+# Django generated directories
+backend/media/
+backend/staticfiles/
+backend/logs/

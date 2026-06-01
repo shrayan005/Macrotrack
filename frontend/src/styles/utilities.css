@@ -1,0 +1,28 @@
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.text-center {
+  text-align: center;
+}
+
+.positive {
+  color: #34c759;
+}
+
+.negative {
+  color: #ff3b30;
+}
+
+/* Section titles - used across multiple pages */
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #000000;
+}
+
+/* Full width utility */
+.full-width {
+  grid-column: 1 / -1;
+  width: 100%;
+}

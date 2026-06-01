@@ -1,0 +1,113 @@
+/* src/components/common/EmptyState.css */
+
+.empty-state {
+  text-align: center;
+  padding: 80px 40px;
+  max-width: 600px;
+  margin: 40px auto;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  border: 2px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.empty-state-icon {
+  font-size: 80px;
+  margin-bottom: 32px;
+  opacity: 0.8;
+  line-height: 1;
+}
+
+.empty-state-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+}
+
+.empty-state-message {
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0 0 40px;
+  padding: 0 20px;
+  font-weight: 500;
+}
+
+.empty-state-action {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+
+.empty-state-action .btn {
+  min-width: 180px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .empty-state {
+    padding: 60px 30px;
+    margin: 30px 20px;
+  }
+
+  .empty-state-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+  }
+
+  .empty-state-title {
+    font-size: 24px;
+  }
+
+  .empty-state-message {
+    font-size: 16px;
+    margin: 0 0 32px;
+    padding: 0 10px;
+  }
+
+  .empty-state-action {
+    gap: 12px;
+  }
+
+  .empty-state-action .btn {
+    min-width: 140px;
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .empty-state {
+    padding: 50px 24px;
+    margin: 20px 16px;
+  }
+
+  .empty-state-icon {
+    font-size: 56px;
+  }
+
+  .empty-state-title {
+    font-size: 22px;
+  }
+
+  .empty-state-message {
+    font-size: 15px;
+  }
+
+  .empty-state-action {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .empty-state-action .btn {
+    width: 100%;
+    min-width: auto;
+  }
+}
