@@ -88,25 +88,31 @@ WSGI_APPLICATION = 'macrotrack_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
+_DATABASE_URL = config('DATABASE_URL', default=None)
 
-        # Connection pooling - keep connections alive for 10 minutes
-        'CONN_MAX_AGE': 600,
-
-        # Connection and query timeout settings
-        'OPTIONS': {
-            'connect_timeout': 10,  # 10 second connection timeout
-            'options': '-c statement_timeout=30000'  # 30 second query timeout
+if _DATABASE_URL:
+    # Production: Neon / Render PostgreSQL via connection URL
+    import dj_database_url as _dj
+    DATABASES = {
+        'default': _dj.parse(_DATABASE_URL, conn_max_age=600, ssl_require=True)
+    }
+else:
+    # Local development: individual credentials from .env
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT'),
+            'CONN_MAX_AGE': 600,
+            'OPTIONS': {
+                'connect_timeout': 10,
+                'options': '-c statement_timeout=30000'
+            }
         }
     }
-}
 
 # Django Caching Configuration
 # https://docs.djangoproject.com/en/4.2/topics/cache/

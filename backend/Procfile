@@ -1,0 +1,1 @@
+web: gunicorn macrotrack_api.wsgi --log-file -
