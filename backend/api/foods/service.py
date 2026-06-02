@@ -108,16 +108,36 @@ class FoodService:
         if len(query) < 3:
             raise ValueError('Search query must be at least 3 characters')
 
-        # Search local database
+        # 1. Try local DB first (fast, cached from previous searches)
         queryset = Food.objects.filter(name__icontains=query, is_verified=True)
-
         if category and category.lower() != 'all':
             queryset = queryset.filter(category__iexact=category)
+        local_foods = list(queryset.order_by('-search_count', 'name').distinct()[:page_size])
 
-        local_foods = queryset.order_by('name', '-search_count').distinct('name')[:page_size]
+        # 2. If not enough local results, fetch from FatSecret and cache them
+        if len(local_foods) < 5:
+            from api.foods.fatsecret import search_fatsecret
+            remote = search_fatsecret(query, max_results=page_size)
+            for item in remote:
+                # Cache in local DB so next search is instant
+                food, created = Food.objects.get_or_create(
+                    name=item['name'],
+                    source='fatsecret',
+                    defaults={
+                        'calories':            item['calories'],
+                        'protein':             item['protein'],
+                        'carbs':               item['carbs'],
+                        'fat':                 item['fat'],
+                        'fdc_id':              item.get('fatsecret_id'),
+                        'serving_description': item.get('serving_description', '100g'),
+                        'is_verified':         True,
+                    }
+                )
+                if food not in local_foods:
+                    local_foods.append(food)
 
         from api.serializers import FoodSerializer
-        serializer = FoodSerializer(local_foods, many=True)
+        serializer = FoodSerializer(local_foods[:page_size], many=True)
         foods = serializer.data
 
         return {

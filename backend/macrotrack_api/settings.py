@@ -213,6 +213,10 @@ AUTHENTICATION_BACKENDS = [
     'accounts.backends.EmailBackend',
 ]
 
+# FatSecret API — used for food search (not AI image analysis)
+FATSECRET_CONSUMER_KEY    = config('FATSECRET_CONSUMER_KEY', default=None)
+FATSECRET_CONSUMER_SECRET = config('FATSECRET_CONSUMER_SECRET', default=None)
+
 # Google OAuth Configuration
 GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default=None)
 GOOGLE_CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET', default=None)
