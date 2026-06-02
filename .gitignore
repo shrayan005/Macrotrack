@@ -1,4 +1,4 @@
-﻿# Dependencies
+# Dependencies
 node_modules/
 */node_modules/
 
@@ -57,6 +57,7 @@ GEMINI.md
 
 # Ignore all markdown files
 *.md
+!README.md
 CLAUDE.md
 *.pdf
 *.png
